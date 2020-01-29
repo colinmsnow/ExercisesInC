@@ -3,8 +3,9 @@ Card counting program
 Colin Snow
 Adapted from Head First C
 
-Keeps a running count of the cards which have been
-played and advises the player when to bet
+Keeps a running count of the value based on 
+cards which have been played and advises 
+the player when to bet
 */
 
 #include <stdio.h>
