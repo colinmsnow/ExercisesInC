@@ -2,6 +2,8 @@
 a.out
 *~
 *.py[co]
+.vscode
+*.vscode
 
 
 exercises/ex05/data
