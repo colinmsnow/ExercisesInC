@@ -1,12 +1,20 @@
 #include <stdio.h>
 
+int newFunc(int param);
+
 int main() {
-    int x = 5;
-    int y = x + 1;
-    printf("%i",y);
-    return 0;
+    int a = 3;
+    int b = 4;
+    int c = a + b;
+    printf("c is %d\n", c);
+    int w = newFunc(5);
+    return(0);
 }
 
+int newFunc(int param){
+
+    return(param);
+}
 
 /*
 1.

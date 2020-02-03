@@ -17,7 +17,7 @@ main:
 	subq	$16, %rsp
 	movl	$5, -8(%rbp)
 	movl	-8(%rbp), %eax
-	addl	$1, %eax
+	subl	$1, %eax
 	movl	%eax, -4(%rbp)
 	movl	-4(%rbp), %eax
 	movl	%eax, %esi
