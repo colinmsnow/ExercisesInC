@@ -34,22 +34,27 @@ returns: string
 */
 char *reverse_string(char *s) {
     int len_s = strlen(s);  // Find length of input
-    // char z[] = malloc(sizeof(char)*(len_s+1));
-    static char z[46];
-    for (int j=0;j<46;j++){
-        z[j] = '\0';
-    }
+    // char* w = malloc((len_s+1));
+    char z[len_s];
+    // for (int j=0;j<46;j++){
+    //     z[j] = '\0';
+    // }
     // char t[len_s];
     int i = 0;
 
-    for(i; i<len_s; i++){
+    for(int i=0; i<len_s; i++){
         // printf("s: %c\n", s[len_s-i-1]);
-        z[i] = s[len_s-i-1]; // Iterate through and replace
+        z[i] = s[len_s-i]; // Iterate through and replace
+        // z[i] = s[i];
     }
     z[len_s] = s[len_s]; // Set null terminator
-    // printf("t: %s\n", t);
+    // // printf("t: %s\n", t);
 
-    return z;
+    // for (int i; i<len_s+1;i++){
+    //     z[i] = s[i];
+    // }
+    // w = z;
+    return s;
 }
 
 /* ctoi: Converts a character to integer.
@@ -173,7 +178,6 @@ returns: BigInt
 BigInt make_bigint(char *s) {
     char *r = reverse_string(s);
     return (BigInt) r;
-    return (BigInt) s;
 }
 
 void test_reverse_string() {
