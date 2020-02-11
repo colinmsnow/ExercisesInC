@@ -34,7 +34,9 @@ returns: string
 */
 char *reverse_string(char *s) {
     int len_s = strlen(s);  // Find length of input
-    char* w = malloc(len_s+1);
+    printf("String Length: %i\n", len_s);
+    char* w = malloc(len_s);
+    printf("Size of w: %i\n", w);
     char z[len_s];
     // for (int j=0;j<46;j++){
     //     z[j] = '\0';
@@ -44,14 +46,13 @@ char *reverse_string(char *s) {
 
     for(int i=0; i<len_s; i++){
         // printf("s: %c\n", s[len_s-i-1]);
-        z[i] = s[len_s-i-1]; // Iterate through and replace
+        w[i] = s[len_s-i-1]; // Iterate through and replace
         // z[i] = s[i];
     }
-    //z[len_s] = s[len_s]; // Set null terminator
-    z[len_s] = '\0';
+    w[len_s] = '\0';  // Set null terminator
     printf("Z: %s\n", z);
 
-    w = z;
+    // w = z;
 
     printf("W: %s\n", w);
 
@@ -178,7 +179,7 @@ returns: BigInt
 */
 BigInt make_bigint(char *s) {
     char *r = reverse_string(s);
-    printf("R: %s", r);
+    printf("R: %s\n", r);
     return (BigInt) r;
 }
 
@@ -218,6 +219,7 @@ void test_add_digits() {
 void test_add_bigint() {
     char *s = "1";
     char *t = "99999999999999999999999999999999999999999999";
+    // char *t = "999999";
     char *res = "000000000000000000000000000000000000000000001";
     printf("S: %s\n", s);
     BigInt big1 = make_bigint(s);
