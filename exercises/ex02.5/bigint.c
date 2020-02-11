@@ -34,16 +34,22 @@ returns: string
 */
 char *reverse_string(char *s) {
     int len_s = strlen(s);  // Find length of input
-    char t[len_s];
+    // char z[] = malloc(sizeof(char)*(len_s+1));
+    static char z[46];
+    for (int j=0;j<46;j++){
+        z[j] = '\0';
+    }
+    // char t[len_s];
     int i = 0;
 
     for(i; i<len_s; i++){
-        t[i] = s[len_s-i-1]; // Iterate through and replace
+        // printf("s: %c\n", s[len_s-i-1]);
+        z[i] = s[len_s-i-1]; // Iterate through and replace
     }
-    t[len_s] = s[len_s]; // Set null terminator
-    s = t; // Save t to s so that we don't return a char* to local variable
+    z[len_s] = s[len_s]; // Set null terminator
+    // printf("t: %s\n", t);
 
-    return s;
+    return z;
 }
 
 /* ctoi: Converts a character to integer.
@@ -52,6 +58,7 @@ c: one of the characters '0' to '9'
 returns: integer 0 to 9
 */
 int ctoi(char c) {
+    // printf("C: %c\n", c);
     assert(isdigit(c));
     return c - '0';
 }
@@ -79,6 +86,7 @@ carry: pointer to char
 
 */
 void add_digits(char a, char b, char c, char *total, char *carry) {
+    // printf("A,B,C: %c, %c, %c\n", a,b,c);
     int result = ctoi(a)+ctoi(b)+ctoi(c);
     // printf("Result: %i\n", result);
     // printf("Total: %i\n", result % 10);
@@ -165,16 +173,21 @@ returns: BigInt
 BigInt make_bigint(char *s) {
     char *r = reverse_string(s);
     return (BigInt) r;
+    return (BigInt) s;
 }
 
 void test_reverse_string() {
     char *s = "123";
     char *t = reverse_string(s);
+    // printf("t: %s\n", t);
     if (strcmp(t, "321") == 0) {
         printf("reverse_string passed\n");
     } else {
         printf("reverse_string failed\n");
     }
+    char *u = "1234567890";
+    char *v = reverse_string(u);
+    // printf("v: %s\n", v);
 }
 
 void test_itoc() {
@@ -200,12 +213,20 @@ void test_add_bigint() {
     char *s = "1";
     char *t = "99999999999999999999999999999999999999999999";
     char *res = "000000000000000000000000000000000000000000001";
-
+    printf("S: %s\n", s);
     BigInt big1 = make_bigint(s);
+    printf("big1: %s\n", big1);
+    printf("T: %s\n", t);
     BigInt big2 = make_bigint(t);
+    printf("big2: %s\n", big2);
     BigInt big3 = malloc(100);
+    // print_bigint(big1);
+    // print_bigint(big2);
+
 
     add_bigint(big1, big2, '0', big3);
+
+    printf("Result: %s\n", big3);
 
     if (strcmp(big3, res) == 0) {
         printf("add_bigint passed\n");
