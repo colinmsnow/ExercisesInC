@@ -34,7 +34,7 @@ returns: string
 */
 char *reverse_string(char *s) {
     int len_s = strlen(s);  // Find length of input
-    // char* w = malloc((len_s+1));
+    char* w = malloc(len_s+1);
     char z[len_s];
     // for (int j=0;j<46;j++){
     //     z[j] = '\0';
@@ -44,17 +44,18 @@ char *reverse_string(char *s) {
 
     for(int i=0; i<len_s; i++){
         // printf("s: %c\n", s[len_s-i-1]);
-        z[i] = s[len_s-i]; // Iterate through and replace
+        z[i] = s[len_s-i-1]; // Iterate through and replace
         // z[i] = s[i];
     }
-    z[len_s] = s[len_s]; // Set null terminator
-    // // printf("t: %s\n", t);
+    //z[len_s] = s[len_s]; // Set null terminator
+    z[len_s] = '\0';
+    printf("Z: %s\n", z);
 
-    // for (int i; i<len_s+1;i++){
-    //     z[i] = s[i];
-    // }
-    // w = z;
-    return s;
+    w = z;
+
+    printf("W: %s\n", w);
+
+    return w;
 }
 
 /* ctoi: Converts a character to integer.
@@ -177,13 +178,14 @@ returns: BigInt
 */
 BigInt make_bigint(char *s) {
     char *r = reverse_string(s);
+    printf("R: %s", r);
     return (BigInt) r;
 }
 
 void test_reverse_string() {
     char *s = "123";
     char *t = reverse_string(s);
-    // printf("t: %s\n", t);
+    printf("t: %s\n", t);
     if (strcmp(t, "321") == 0) {
         printf("reverse_string passed\n");
     } else {
