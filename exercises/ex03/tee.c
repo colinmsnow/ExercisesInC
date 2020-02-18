@@ -26,31 +26,14 @@ int main (int argc, char **argv){
     file = fopen(file_name, (a_option) ? "a" : "w");
 
 
-    do{
+    while (1){
         current_char = getchar();
+        if (current_char == EOF){break;}
         fprintf(file, "%c",current_char);
         printf("%c",current_char);
-    }while (current_char != EOF);
+    }
 
     fclose(file);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return 0;
 }
