@@ -1,5 +1,5 @@
 #include "trout.h"
-
+#include "util.h"
 
 extern int max_ttl;
 extern int nprobes;
