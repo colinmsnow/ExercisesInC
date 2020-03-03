@@ -69,7 +69,12 @@ float my_random_float2()
     }
 
     // use the remaining bit as the mantissa
+
     mant = x >> 8;
+
+    printf("Mant is %li\n", mant);
+    printf("exponent is %li\n", exp);
+    printf("exponent is %li\n", exp<<23);
     b.i = (exp << 23) | mant;
 
     return b.f;
@@ -78,7 +83,48 @@ float my_random_float2()
 // compute a random double using my algorithm
 double my_random_double()
 {
-    // TODO: fill this in
+    long exp, mant;
+    float f;
+    long x;
+    long exponent = 1022;
+    int mask = 1;
+
+    // this union is for assembling the double.
+    union {
+        float f;
+        int i;
+    } b;
+
+    // I tried to do this with the assembly code, but it threw an error
+    // about incorrect registers and while I am sure this can be corrected,
+    // this version makes much more sense to me
+
+
+    while (1) {
+        x = random() * 1000000000 + random() ;
+        // printf("%li", x);
+        if (x == 0) {
+            exponent -= 63;
+        } else {
+            break;
+        }
+    }
+
+    // find the location of the first set bit and compute the exponent
+    while (x & mask) {
+        mask <<= 1;
+        exponent--;
+    }
+
+    // use the remaining bit as the mantissa
+    mant = x >> 16;
+    printf("Mant is %li\n", mant);
+    printf("exponent is %li\n", exponent);
+    printf("exponent is %li\n", exponent<<16);
+    b.i = (exponent << 16) | mant;
+
+    return b.f;
+
 }
 
 // return a constant (this is a dummy function for time trials)
