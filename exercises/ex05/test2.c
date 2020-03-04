@@ -11,8 +11,8 @@ int main (int argc, char *argv[])
 
     srandom (time (NULL));
 
-    for (i=0; i<10000; i++) {
-        x = my_random_float();
+    for (i=0; i<1000000; i++) {
+        x = my_random_float2();
         printf ("%lf\n", x);
     }
 

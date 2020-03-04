@@ -5,6 +5,7 @@ License: MIT License https://opensource.org/licenses/MIT
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 
 // generate a random float using the algorithm described
 // at http://allendowney.com/research/rand
@@ -72,9 +73,9 @@ float my_random_float2()
 
     mant = x >> 8;
 
-    printf("Mant is %li\n", mant);
-    printf("exponent is %li\n", exp);
-    printf("exponent is %li\n", exp<<23);
+    // printf("Mant is %li\n", mant);
+    // printf("exponent is %li\n", exp);
+    // printf("exponent is %li\n", exp<<23);
     b.i = (exp << 23) | mant;
 
     return b.f;
@@ -83,16 +84,16 @@ float my_random_float2()
 // compute a random double using my algorithm
 double my_random_double()
 {
-    long exp, mant;
+    long long int exp, mant;
     float f;
-    long x;
-    long exponent = 1022;
-    int mask = 1;
+    long long int x;
+    long long int exponent = 1022;
+    long long int mask = 1;
 
     // this union is for assembling the double.
     union {
-        float f;
-        int i;
+        double f;
+        long long int i;
     } b;
 
     // I tried to do this with the assembly code, but it threw an error
@@ -101,14 +102,16 @@ double my_random_double()
 
 
     while (1) {
-        x = random() * 1000000000 + random() ;
-        // printf("%li", x);
+        x = ((long long) random() << 32) | (long long) random() ; // Create random long
+        
         if (x == 0) {
-            exponent -= 63;
+            exponent -= 31;
         } else {
             break;
         }
     }
+
+    // printf("x is: %x\n", x);
 
     // find the location of the first set bit and compute the exponent
     while (x & mask) {
@@ -117,11 +120,11 @@ double my_random_double()
     }
 
     // use the remaining bit as the mantissa
-    mant = x >> 16;
-    printf("Mant is %li\n", mant);
-    printf("exponent is %li\n", exponent);
-    printf("exponent is %li\n", exponent<<16);
-    b.i = (exponent << 16) | mant;
+    mant = x >> 11;
+    // printf("Mant is %li\n", mant);
+    // printf("exponent is %li\n", exponent);
+    // printf("exponent is %li\n", exponent<<52);
+    b.i = (exponent << 52) | mant;
 
     return b.f;
 
