@@ -178,8 +178,9 @@ int hash_hashable(Hashable *hashable)
 */
 int equal_int (void *ip, void *jp)
 {
-    // FILL THIS IN!
-    return 0;
+    int i = *((int*)ip);
+    int j = *((int*)jp);
+    return (i==j);
 }
 
 
@@ -192,8 +193,11 @@ int equal_int (void *ip, void *jp)
 */
 int equal_string (void *s1, void *s2)
 {
-    // FILL THIS IN!
-    return 0;
+    char* i = ((char*)s1);
+    char* j = ((char*)s2);
+    int k = strcmp(i,j);
+    if (k) {return 0;}
+    return 1;
 }
 
 
@@ -207,10 +211,11 @@ int equal_string (void *s1, void *s2)
 */
 int equal_hashable(Hashable *h1, Hashable *h2)
 {
-    // FILL THIS IN!
-    return 0;
+    // What does it mean for two hashables to be equal????
+    
+    return h1->equal(h1,h2);
 }
-
+ 
 
 /* Makes a Hashable int.
 *
@@ -296,7 +301,15 @@ Node *prepend(Hashable *key, Value *value, Node *rest)
 /* Looks up a key and returns the corresponding value, or NULL */
 Value *list_lookup(Node *list, Hashable *key)
 {
-    // FILL THIS IN!
+    while (1){
+        if(equal_hashable(list->key, key)){
+            return list->value;
+        }
+        
+        list = list->next;
+        if (list == NULL) {break;}
+
+    }
     return NULL;
 }
 
@@ -341,15 +354,20 @@ void print_map(Map *map)
 /* Adds a key-value pair to a map. */
 void map_add(Map *map, Hashable *key, Value *value)
 {
-    // FILL THIS IN!
+    // Fill In
+    // Need to hash the key to figure out what list to put it in// reduce hash value to range 0 to map->n-1
+    // do this with abs(hash_value) % map->n
+    int hash_value = (key->hash(key) )% (map->n);
+    map->lists[hash_value] = prepend(key,value,map->lists[hash_value]);
 }
 
 
 /* Looks up a key and returns the corresponding value, or NULL. */
 Value *map_lookup(Map *map, Hashable *key)
 {
-    // FILL THIS IN!
-    return NULL;
+    int hash_value = (key->hash(key) )% (map->n);
+    if (map->lists[hash_value] == NULL) {return NULL;}
+    return list_lookup(map->lists[hash_value], key);
 }
 
 
@@ -406,4 +424,6 @@ int main ()
     print_lookup(value);
 
     return 0;
+
+
 }
