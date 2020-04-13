@@ -20,6 +20,11 @@ void error(char *msg)
     exit(1);
 }
 
+void child_code(const char *PYTHON, const char *SCRIPT, char *search_phrase, char *vars[])
+{
+    int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
+}
+
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
@@ -38,15 +43,42 @@ int main(int argc, char *argv[])
     int num_feeds = 5;
     char *search_phrase = argv[1];
     char var[255];
+    int pid;
+    int status;
 
     for (int i=0; i<num_feeds; i++) {
         sprintf(var, "RSS_FEED=%s", feeds[i]);
         char *vars[] = {var, NULL};
 
-        int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
-        if (res == -1) {
-            error("Can't run script.");
+        pid = fork();
+
+        /* check for an error */
+        if (pid == -1) {
+            fprintf(stderr, "fork failed: %s\n", strerror(errno));
+            perror(argv[0]);
+            exit(1);
+        }
+
+        /* see if we're the parent or the child */
+        if (pid == 0) {
+            child_code(PYTHON, SCRIPT, search_phrase, vars);
+            exit(i);
         }
     }
+
+    for (int i=0; i<num_feeds; i++) {
+        pid = wait(&status);
+
+        if (pid == -1) {
+            fprintf(stderr, "wait failed: %s\n", strerror(errno));
+            perror(argv[0]);
+            exit(1);
+        }
+
+        // check the exit status of the child
+        status = WEXITSTATUS(status);
+    }
+
+
     return 0;
 }

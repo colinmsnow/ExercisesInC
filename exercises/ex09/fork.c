@@ -30,10 +30,15 @@ double get_seconds() {
 }
 
 
-void child_code(int i)
+void child_code(int i, int* a, int* b)
 {
     sleep(i);
+    *a += 1;
+    *b += 1;
+
     printf("Hello from child %d.\n", i);
+    printf("Child code function at %i \n", child_code);
+    printf("a is : %i, b is : %i \n", *a, *b);
 }
 
 // main takes two parameters: argc is the number of command-line
@@ -45,6 +50,12 @@ int main(int argc, char *argv[])
     pid_t pid;
     double start, stop;
     int i, num_children;
+
+
+    int x = 1;
+    int* a = &x;
+    int* b = malloc(sizeof(int));
+    *b = 1;
 
     // the first command-line argument is the name of the executable.
     // if there is a second, it is the number of children to create.
@@ -72,7 +83,7 @@ int main(int argc, char *argv[])
 
         /* see if we're the parent or the child */
         if (pid == 0) {
-            child_code(i);
+            child_code(i, a, b);
             exit(i);
         }
     }
@@ -96,6 +107,7 @@ int main(int argc, char *argv[])
     // compute the elapsed time
     stop = get_seconds();
     printf("Elapsed time = %f seconds.\n", stop - start);
+    printf("a is : %i, b is : %i \n", *a, *b);
 
     exit(0);
 }
