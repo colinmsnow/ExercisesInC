@@ -11,6 +11,8 @@ License: GNU GPLv3
 
 #define NUM_CHILDREN 100
 
+typedef pthread_mutex_t Mutex;
+
 void perror_exit(char *s)
 {
     perror(s);
@@ -30,7 +32,28 @@ typedef struct {
     int counter;
     int end;
     int *array;
+    Mutex* mutex;
 } Shared;
+
+Mutex *make_mutex()
+{
+Mutex *mutex = check_malloc(sizeof(Mutex));
+int n = pthread_mutex_init(mutex, NULL);
+if (n != 0) perror_exit("make_lock failed");
+return mutex;
+}
+
+void mutex_lock(Mutex *mutex)
+{
+int n = pthread_mutex_lock(mutex);
+if (n != 0) perror_exit("lock failed");
+}
+
+void mutex_unlock(Mutex *mutex)
+{
+int n = pthread_mutex_unlock(mutex);
+if (n != 0) perror_exit("unlock failed");
+}
 
 Shared *make_shared(int end)
 {
@@ -44,6 +67,7 @@ Shared *make_shared(int end)
     for (i=0; i<shared->end; i++) {
         shared->array[i] = 0;
     }
+    shared->mutex = make_mutex();
     return shared;
 }
 
@@ -69,10 +93,12 @@ void join_thread(pthread_t thread)
 
 void child_code(Shared *shared)
 {
+    mutex_lock(shared->mutex);
     // printf("Starting child at counter %d\n", shared->counter);
 
     while (1) {
         if (shared->counter >= shared->end) {
+            mutex_unlock(shared->mutex);
             return;
         }
         shared->array[shared->counter]++;
@@ -82,6 +108,7 @@ void child_code(Shared *shared)
         //     printf("%d\n", shared->counter);
         // }
     }
+    mutex_unlock(shared->mutex);
 }
 
 void *entry(void *arg)
